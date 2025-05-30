@@ -43,32 +43,48 @@ if ($args.Count -eq 0) {
     $exercismCurrentExerciseDir = Join-Path $configuredExercismBaseDir $exerciseName
 }
 
-# --- NEW LOGIC: Dynamically find the .js solution file ---
-$jsFiles = Get-ChildItem -Path $exercismCurrentExerciseDir -Filter "*.js" -File -Recurse:$false
+# --- IMPROVED LOGIC: Dynamically find and/or select the .js solution file ---
+$jsFiles = Get-ChildItem -Path $exercismCurrentExerciseDir -Filter "*.js" -File -Recurse:$false | Select-Object -ExpandProperty Name
 
-if ($jsFiles.Count -eq 0) {
+$solutionFileName = $null
+
+# 1. Try to find a file matching the exercise name (e.g., 'lasagna.js')
+if ($jsFiles -contains "$exerciseName.js") {
+    $solutionFileName = "$exerciseName.js"
+}
+# 2. If not found, try to find 'solution.js'
+elseif ($jsFiles -contains "solution.js") {
+    $solutionFileName = "solution.js"
+}
+# 3. If still not found and there's only one .js file, use that
+elseif ($jsFiles.Count -eq 1) {
+    $solutionFileName = $jsFiles[0]
+}
+# 4. If multiple .js files and no clear match, prompt the user
+elseif ($jsFiles.Count -gt 1) {
+    Write-Host "Multiple .js files found in '$exercismCurrentExerciseDir':" -ForegroundColor Yellow
+    for ($i = 0; $i -lt $jsFiles.Count; $i++) {
+        Write-Host "$($i + 1). $($jsFiles[$i])"
+    }
+
+    $selectedIndex = $null
+    while ($true) {
+        $input = Read-Host "Enter the number of the .js file to submit (1-$($jsFiles.Count))"
+        if ([int]::TryParse($input, [ref]$selectedIndex) -and $selectedIndex -ge 1 -and $selectedIndex -le $jsFiles.Count) {
+            $solutionFileName = $jsFiles[$selectedIndex - 1]
+            break
+        } else {
+            Write-Host "Invalid selection. Please enter a number between 1 and $($jsFiles.Count)." -ForegroundColor Red
+        }
+    }
+    Write-Host "Selected '$solutionFileName' for submission." -ForegroundColor Green
+}
+# 5. If no .js files found at all
+else {
     Write-Host "Error: No .js solution file found in '$exercismCurrentExerciseDir'. Cannot submit." -ForegroundColor Red
     exit 1
-} elseif ($jsFiles.Count -gt 1) {
-    # If multiple .js files, try to pick the one that matches the exercise slug or a common pattern
-    # For now, let's prioritize the one that matches the inferred exercise name or is "solution.js"
-    # Otherwise, we'll pick the first one found.
-    $possibleSolutionFile = $jsFiles | Where-Object { $_.Name -eq "$exerciseName.js" }
-    if (-not $possibleSolutionFile) {
-        $possibleSolutionFile = $jsFiles | Where-Object { $_.Name -eq "solution.js" }
-    }
-    if (-not $possibleSolutionFile) {
-        # Fallback: if still not found by common patterns, pick the first one found
-        $possibleSolutionFile = $jsFiles | Select-Object -First 1
-    }
-
-    $solutionFileName = $possibleSolutionFile.Name
-    Write-Host "Warning: Multiple .js files found. Using '$solutionFileName' for submission." -ForegroundColor Yellow
-} else {
-    # Exactly one .js file found, use that
-    $solutionFileName = $jsFiles[0].Name
 }
-# --- END NEW LOGIC ---
+# --- END IMPROVED LOGIC ---
 
 
 # Construct the full path to the solution file in the Exercism directory
@@ -79,8 +95,7 @@ $destinationPath = Join-Path $destinationDir $solutionFileName
 
 Write-Host "--- Starting Combined Exercism Submit and GitHub Sync for '$exerciseName' ---" -ForegroundColor Green
 
-# 1. Check if the local solution file exists before proceeding (now redundant due to Get-ChildItem)
-# This check mostly ensures the file is accessible after determining its name.
+# 1. Check if the local solution file exists before proceeding (now mostly a final validation)
 if (-not (Test-Path $sourcePath)) {
     Write-Host "Error: Solution file (determined as '$solutionFileName') not found at '$sourcePath'. This is unexpected after search." -ForegroundColor Red
     exit 1
@@ -122,6 +137,12 @@ if (-not (Test-Path $destinationDir)) {
 # 4. Copy the solution file from Exercism to GitHub repo
 Write-Host "Copying '$solutionFileName' from Exercism to GitHub repo..." -ForegroundColor Cyan
 try {
+    # Check if the file already exists in the destination to determine if it's an update or new
+    if (Test-Path $destinationPath) {
+        Write-Host "Updating existing solution file: $solutionFileName" -ForegroundColor Yellow
+    } else {
+        Write-Host "Adding new solution file: $solutionFileName" -ForegroundColor Green
+    }
     Copy-Item -Path $sourcePath -Destination $destinationPath -Force
     Write-Host "Successfully copied: $solutionFileName" -ForegroundColor Green
 } catch {
@@ -137,8 +158,15 @@ try {
     Write-Host "Adding changes to Git..." -ForegroundColor Cyan
     git add .
 
+    # Prompt for commit message
+    $commitMessage = Read-Host "Enter Git commit message (e.g., 'Solve <exercise-name>')"
+    if ([string]::IsNullOrWhiteSpace($commitMessage)) {
+        $commitMessage = "Solution for $exerciseName" # Default message if user enters nothing
+        Write-Host "No commit message provided. Using default: '$commitMessage'" -ForegroundColor Yellow
+    }
+
     Write-Host "Committing changes..." -ForegroundColor Cyan
-    git commit -m "Solution for $exerciseName"
+    git commit -m "$commitMessage"
 
     Write-Host "Pushing to GitHub (branch: $gitBranch)..." -ForegroundColor Cyan
     git push origin $gitBranch
