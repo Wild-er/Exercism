@@ -58,7 +58,7 @@ export function backDoorResponse(line) {
  * letters.
  *
  * @param {string} word the letters you responded with before
- * @returns {string} the back door password.
+ * @returns {string} the back door password
  */
 export function backDoorPassword(word) {
   return word[0].toUpperCase() + word.slice(1) + ", please"; // Capitalize the first letter, combine it with the remaining lowercase string -> add the greeting to the end.
