@@ -38,7 +38,7 @@ export function frontDoorResponse(line) {
  * @returns {string} the front door password
  */
 export function frontDoorPassword(word) {
-  return word[0] + word.slice(1).toLowerCase() + ", please"; // Leave the first letter, combine it with the remaining string converted to lowercase -> add the greeting to the end.
+  return word[0] + word.slice(1).toLowerCase(); // Leave the first letter, combine it with the remaining string converted to lowercase -> add the greeting to the end.
 }
 
 /**
