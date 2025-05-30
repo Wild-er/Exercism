@@ -49,7 +49,7 @@ export function frontDoorPassword(word) {
  * @returns {string}
  */
 export function backDoorResponse(line) {
-  line = line.trim();
+  line = line.trim(); // Clean up the line of any trailing whitespace.
   return line[line.length -1]; // Get the last letter of the line
 }
 
