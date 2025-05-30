@@ -43,7 +43,33 @@ if ($args.Count -eq 0) {
     $exercismCurrentExerciseDir = Join-Path $configuredExercismBaseDir $exerciseName
 }
 
-$solutionFileName = "$exerciseName.js" # Assuming the solution file is always <exercise-name>.js
+# --- NEW LOGIC: Dynamically find the .js solution file ---
+$jsFiles = Get-ChildItem -Path $exercismCurrentExerciseDir -Filter "*.js" -File -Recurse:$false
+
+if ($jsFiles.Count -eq 0) {
+    Write-Host "Error: No .js solution file found in '$exercismCurrentExerciseDir'. Cannot submit." -ForegroundColor Red
+    exit 1
+} elseif ($jsFiles.Count -gt 1) {
+    # If multiple .js files, try to pick the one that matches the exercise slug or a common pattern
+    # For now, let's prioritize the one that matches the inferred exercise name or is "solution.js"
+    # Otherwise, we'll pick the first one found.
+    $possibleSolutionFile = $jsFiles | Where-Object { $_.Name -eq "$exerciseName.js" }
+    if (-not $possibleSolutionFile) {
+        $possibleSolutionFile = $jsFiles | Where-Object { $_.Name -eq "solution.js" }
+    }
+    if (-not $possibleSolutionFile) {
+        # Fallback: if still not found by common patterns, pick the first one found
+        $possibleSolutionFile = $jsFiles | Select-Object -First 1
+    }
+
+    $solutionFileName = $possibleSolutionFile.Name
+    Write-Host "Warning: Multiple .js files found. Using '$solutionFileName' for submission." -ForegroundColor Yellow
+} else {
+    # Exactly one .js file found, use that
+    $solutionFileName = $jsFiles[0].Name
+}
+# --- END NEW LOGIC ---
+
 
 # Construct the full path to the solution file in the Exercism directory
 $sourcePath = Join-Path $exercismCurrentExerciseDir $solutionFileName
@@ -53,9 +79,10 @@ $destinationPath = Join-Path $destinationDir $solutionFileName
 
 Write-Host "--- Starting Combined Exercism Submit and GitHub Sync for '$exerciseName' ---" -ForegroundColor Green
 
-# 1. Check if the local solution file exists before proceeding
+# 1. Check if the local solution file exists before proceeding (now redundant due to Get-ChildItem)
+# This check mostly ensures the file is accessible after determining its name.
 if (-not (Test-Path $sourcePath)) {
-    Write-Host "Error: Solution file not found at '$sourcePath'. Please ensure the file exists in your Exercism directory." -ForegroundColor Red
+    Write-Host "Error: Solution file (determined as '$solutionFileName') not found at '$sourcePath'. This is unexpected after search." -ForegroundColor Red
     exit 1
 }
 
@@ -64,17 +91,22 @@ Write-Host "Submitting '$solutionFileName' to Exercism..." -ForegroundColor Cyan
 try {
     # Navigate to the specific exercise directory for submission
     Push-Location $exercismCurrentExerciseDir
-    # Execute the exercism submit command without PowerShell's -ErrorAction flag
-    exercism submit $solutionFileName
+
+    # Execute the exercism submit command and capture all its output
+    $exercismOutput = exercism submit $solutionFileName *>&1
 
     # Check the exit code of the last external command (exercism)
     if ($LASTEXITCODE -ne 0) {
-        throw "Exercism submission failed with exit code $LASTEXITCODE."
+        Write-Host "Exercism submission failed with exit code $LASTEXITCODE." -ForegroundColor Red
+        Write-Host "--- Exercism CLI Output (Error Details) ---" -ForegroundColor Yellow
+        $exercismOutput | ForEach-Object { Write-Host $_ }
+        Write-Host "-------------------------------------------" -ForegroundColor Yellow
+        throw "Exercism submission failed. Check the 'Exercism CLI Output' above for details."
     }
     Write-Host "Successfully submitted to Exercism." -ForegroundColor Green
+
 } catch {
-    Write-Host "Error submitting to Exercism: $_" -ForegroundColor Red
-    # Exit if Exercism submission fails, as GitHub sync won't be meaningful
+    Write-Host "An error occurred during Exercism submission: $_" -ForegroundColor Red
     Pop-Location # Ensure we pop back even on error
     exit 1
 } finally {
