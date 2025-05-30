@@ -64,9 +64,13 @@ Write-Host "Submitting '$solutionFileName' to Exercism..." -ForegroundColor Cyan
 try {
     # Navigate to the specific exercise directory for submission
     Push-Location $exercismCurrentExerciseDir
-    # Execute the exercism submit command
-    # Use -ErrorAction Stop to ensure PowerShell throws an error if exercism submit fails
-    exercism submit $solutionFileName -ErrorAction Stop
+    # Execute the exercism submit command without PowerShell's -ErrorAction flag
+    exercism submit $solutionFileName
+
+    # Check the exit code of the last external command (exercism)
+    if ($LASTEXITCODE -ne 0) {
+        throw "Exercism submission failed with exit code $LASTEXITCODE."
+    }
     Write-Host "Successfully submitted to Exercism." -ForegroundColor Green
 } catch {
     Write-Host "Error submitting to Exercism: $_" -ForegroundColor Red
