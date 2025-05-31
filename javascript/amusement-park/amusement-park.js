@@ -43,7 +43,7 @@ export function ticketStatus(tickets, ticketId) {
   else if (tickets[ticketId] === null) {
     return 'not sold';
   }
-  return 'sold to ' + tickets.ticketId;
+  return 'sold to ' + tickets[ticketId];
 }
 
 /**
@@ -68,5 +68,5 @@ export function simpleTicketStatus(tickets, ticketId) {
  * @returns {string | undefined} version
  */
 export function gtcVersion(visitor) {
-  return visitor.gtc?.version; // return the version number from the gtc object.
+  return visitor[gtc]?[version]; // return the version number from the gtc object.
 }
