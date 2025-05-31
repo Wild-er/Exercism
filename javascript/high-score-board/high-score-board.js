@@ -20,7 +20,7 @@ export function createScoreBoard() {
  * @returns {Record<string, number>} updated score board
  */
 export function addPlayer(scoreBoard, player, score) {
-  scoreBoard.player = score; // Add a new element to the object
+  scoreBoard[player] = score; // Add a new element to the object
   return scoreBoard;
 }
 
@@ -32,7 +32,7 @@ export function addPlayer(scoreBoard, player, score) {
  * @returns {Record<string, number>} updated score board
  */
 export function removePlayer(scoreBoard, player) {
-  delete scoreBoard.player; // Remove them from the object.
+  delete scoreBoard[player]; // Remove them from the object.
   return scoreBoard;
 }
 
