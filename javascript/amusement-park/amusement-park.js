@@ -37,10 +37,10 @@ export function revokeTicket(visitor) {
  * @returns {string} ticket status
  */
 export function ticketStatus(tickets, ticketId) {
-    if (tickets.ticketId === null) {
+    if (tickets[ticketId] === null) {
     return 'not sold';
   }
-  else if (tickets.ticketId === undefined) {
+  else if (tickets[ticketId] === undefined) {
     return 'unknown ticket id';
   }
   return 'sold to ' + tickets[ticketId];
