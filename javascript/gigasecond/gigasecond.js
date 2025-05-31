@@ -4,7 +4,9 @@
 //
 
 /**
- * Date passed to us will be in milliseconds.
+ * Date passed to us will be in UTC 
+ * 
+ * We want it in milieconds
  * 
  * We need to find the day that is 1,000,000,000 ahead of that.
  * 
@@ -17,6 +19,7 @@
  */
 
 export const gigasecond = (date) => {
-  Date.length(date) += 1e+12;
-  return Date.UTC(date); // Return the date a gigasecond later, in the UTC format expected
+  return new Date(date.getTime() + 1e+12); // Return the date a gigasecond late
 };
+
+
