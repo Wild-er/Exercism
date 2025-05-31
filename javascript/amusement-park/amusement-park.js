@@ -41,7 +41,7 @@ export function ticketStatus(tickets, ticketId) {
     return 'not sold';
   }
   else if (tickets.ticketId === undefined) {
-    return 'unkown ticket id';
+    return 'unknown ticket id';
   }
   return 'sold to ' + tickets[ticketId];
 }
@@ -55,7 +55,7 @@ export function ticketStatus(tickets, ticketId) {
  * @returns {string} ticket status
  */
 export function simpleTicketStatus(tickets, ticketId) {
-  if (tickets.hasOwnProperty(ticketId) === true) {
+  if (tickets.hasOwnProperty(ticketId) != null) {
     return tickets[ticketId];
   }
   return 'invalid ticket !!!'
