@@ -36,7 +36,7 @@ export function timeToMixJuice(name) {
  */
 export function limesToCut(wedgesNeeded, limes) {
   let c = 0;
-  while (wedgesNeeded > 0) {
+  while (wedgesNeeded > 0 && limes.length > 0) {
     switch (limes[0]) {
       case 'medium':
         wedgesNeeded -= 8; // 8 slices for a medium
