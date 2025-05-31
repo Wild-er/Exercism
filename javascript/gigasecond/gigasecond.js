@@ -17,6 +17,6 @@
  */
 
 export const gigasecond = (date) => {
-  date += 1e+12;
+  Date.length(date) += 1e+12;
   return Date.UTC(date); // Return the date a gigasecond later, in the UTC format expected
 };
