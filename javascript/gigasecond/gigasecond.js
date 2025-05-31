@@ -18,8 +18,8 @@
  * @returns {string} UTC date a gigasecond later
  */
 
-export const gigasecond = () => {
-  return new Date(this.getTime() + 1e+12); // Return the date a gigasecond late
+export const gigasecond = (date) => {
+  return new Date(date.getTime() + 1e+12); // Return the date a gigasecond late
 };
 
 
