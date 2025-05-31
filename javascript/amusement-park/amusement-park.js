@@ -38,7 +38,7 @@ export function revokeTicket(visitor) {
  */
 export function ticketStatus(tickets, ticketId) {
     if (tickets.ticketId === undefined) {
-    return 'unkown ticket id';
+    return 'unknown ticket id';
   }
   else if (tickets.ticketId === null) {
     return 'not sold';
@@ -68,5 +68,5 @@ export function simpleTicketStatus(tickets, ticketId) {
  * @returns {string | undefined} version
  */
 export function gtcVersion(visitor) {
-  return visitor[gtc[version]];
+  return visitor.gtc.version;
 }
