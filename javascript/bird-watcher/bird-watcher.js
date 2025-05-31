@@ -7,7 +7,6 @@
 /**
  * Calculates the total bird count.
  *
- * @var {number} c bird counter
  * @param {number[]} birdsPerDay
  * @returns {number} total bird count
  */
@@ -28,8 +27,8 @@ export function totalBirdCount(birdsPerDay) {
  */
 export function birdsInWeek(birdsPerDay, week) {
   let c = 0; // Stores the bird count
-  week *=  7;
-  for (let i = 0; i <= week; i++) { // Cycle through all the days in that week
+  week = week * 7 - 7;
+  for (let i = 0; i < 7; i++) { // Cycle through all the days in that week
     c += birdsPerDay[i + week]; // Add the bird count to the total
   }
   return c;
