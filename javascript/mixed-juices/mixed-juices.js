@@ -44,6 +44,8 @@ export function limesToCut(wedgesNeeded, limes) {
         wedgesNeeded -= 10; // 10 slices for a small lime
       case 'small': 
         wedgesNeeded -= 6; // 6 slices for a small lime
+      default: 
+        break;
     }
     limes.shift();// Remove the tested lime.
     c++; // 1 more lime is now cut
