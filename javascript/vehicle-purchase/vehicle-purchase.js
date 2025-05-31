@@ -11,10 +11,10 @@
  * @returns {boolean} whether a license is required
  */
 export function needsLicense(kind) {
-  if (kind === 'bike' || kind === 'stroller') {
-    return false; // It's a bike, no license required
+  if (kind === 'car' || kind === 'truck') {
+    return true; 
   }
-  return true; 
+  return false; //  no license required, not  a vehicle
 }
 
 /**
