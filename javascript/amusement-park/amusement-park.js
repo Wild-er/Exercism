@@ -38,7 +38,7 @@ export function revokeTicket(visitor) {
  */
 export function ticketStatus(tickets, ticketId) {
     if (tickets.ticketId === undefined) {
-    return 'unkown ticket ID';
+    return 'unkown ticket id';
   }
   else if (tickets.ticketId === null) {
     return 'not sold';
