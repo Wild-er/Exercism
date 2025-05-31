@@ -55,7 +55,7 @@ export function ticketStatus(tickets, ticketId) {
  * @returns {string} ticket status
  */
 export function simpleTicketStatus(tickets, ticketId) {
-  if (tickets.hasOwnProperty(ticketId) != null) {
+  if (tickets.ticketId !== null) {
     return tickets[ticketId];
   }
   return 'invalid ticket !!!'
