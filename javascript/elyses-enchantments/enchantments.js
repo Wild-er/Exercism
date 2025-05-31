@@ -22,7 +22,7 @@ export function getItem(cards, position) {
  * @returns {number[]} the cards with the change applied
  */
 export function setItem(cards, position, replacementCard) {
-  cards.splice(position, replacementCard) // Exchange a single replacement card. Start at the position, insert the replacement card.
+  cards[position] = replacementCard // Exchange a single replacement card.
   return cards;
 }
 
