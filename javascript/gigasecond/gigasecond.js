@@ -13,8 +13,9 @@
  * 
  * 
  * @param {*} date 
+ * @returns {string} UTC date a gigasecond later
  */
 
 export const gigasecond = (date) => {
-  return date + 1e+12; // Return the date a gigasecond later
+  return Date.UTC(date + 1e+12); // Return the date a gigasecond later, in the UTC format expected
 };
