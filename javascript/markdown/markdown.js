@@ -2,9 +2,12 @@ function wrap(text, tag) {
   return `<${tag}>${text}</${tag}>`;
 }
 
+/*
+* Not needed because wrap does the job well.
 function isTag(text, tag) {
   return text.startsWith(`<${tag}>`);
 }
+*/
 
 function parser(markdown, delimiter, tag) {
   const pattern = new RegExp(`${delimiter}(.+)${delimiter}`);
@@ -12,16 +15,17 @@ function parser(markdown, delimiter, tag) {
   return markdown.replace(pattern, replacement);
 }
 
-function parse__(markdown) {
+// Parses text for double underscores. If fun
+function parseBold(markdown) {
   return parser(markdown, '__', 'strong');
 }
 
-function parse_(markdown) {
+function parseEmphasis(markdown) {
   return parser(markdown, '_', 'em');
 }
 
 function parseText(markdown, list) {
-  const parsedText = parse_(parse__(markdown));
+  const parsedText = parseEmphasis(parseBold(markdown));
   if (list) {
     return parsedText;
   } else {
