@@ -18,17 +18,8 @@ export function twoSum(array1, array2) {
  * @returns {boolean} whether the number is a palindrome or not
  */
 export function luckyNumber(value) {
-  let s = String(value);
-  let l = s.length; // length of the array
-  let p1 = []; // first part of the palindrome
-  let p2 = []; // second part fot he palindrome
-  for (let a = 0; a < l / 2; a++) { // Take the first half
-      p1.push(s[a]);
-  }
-  for (let a = l / 2; a < l; a++) { // Take the 2nd half
-      p2.unshift(s[a]);
-  }
-  return String(p1) === String(p2); // Return a truthy value
+  let s = String(value); // Make it a string so we can work with it easily
+  return s === s.split('').reverse().join(''); // Split the string into an array of chars, Reverse the order, join it back togethers to a string. OG s === s if palindrome
 }
 
 /**
