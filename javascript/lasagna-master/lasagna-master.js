@@ -61,12 +61,28 @@ export function quantities(layers) {
     return o;
 }
 
+/**
+ * Modify the personal list to add the secret ingredient.
+ * The secret ingredient is the last element of their 
+ * object.
+ * 
+ * @param {object} fList Friends list
+ * @param {object} mList My list
+ * 
+ */
 export function addSecretIngredient(fList, mList) {
     mList.push(fList[fList.length - 1]);
 }
 
+/**
+ * 
+ * @param {object} recipe // Recipe for 2
+ * @param {number} portions // How many people you need to feed
+ * @returns 
+ */
+
 export function scaleRecipe(recipe, portions) {
-    const O = {};
+    const O = {}; // This is where we will make the final scaled recipe
     const S = portions / 2; //The recipe is for 2 people, so the scale needs to reflect that.
     for (let key in recipe) { // Go through all the key pairs
         O[key] = recipe[key] * S; // Add the key pair from the recipe with the scaler applied.
