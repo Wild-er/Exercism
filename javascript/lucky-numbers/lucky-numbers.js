@@ -28,7 +28,7 @@ export function luckyNumber(value) {
   for (let a = l / 2; a < l; a++) { // Take the 2nd half
       p2.unshift(s[a]);
   }
-  return p1 === p2; // Return a truthy value
+  return p1 == p2; // Return a truthy value
 }
 
 /**
