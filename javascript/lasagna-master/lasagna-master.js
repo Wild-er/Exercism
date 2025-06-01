@@ -19,3 +19,9 @@ else if (minutes > 0) {
 return 'You forgot to set the timer.'
  }
 
+export function preperationTime(layers, time) {
+    if (time) {
+        return layers.length * time;
+    }
+    return layers.length * 2;
+}
