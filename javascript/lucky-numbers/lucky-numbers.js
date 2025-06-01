@@ -31,11 +31,11 @@ export function luckyNumber(value) {
  */
 export function errorMessage(input) {
   let n = Number(input);
-  if (n < 0 || n > 0 ) {
+  if (n < 0 || n > 0 ) { // valid number
     return '';
   }
-  else if (input === null || input === undefined || input === '') {
+  else if (input === null || input === undefined || input === '') { // Check for an empty field
     return 'Required field';
   }
-  return 'Must be a number besides 0'
+  return 'Must be a number besides 0' // bad input
 }
