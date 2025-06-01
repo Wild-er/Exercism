@@ -69,7 +69,7 @@ export function scaleRecipe(recipe, portions) {
     const O = {};
     const S = portions / 2; //The recipe is for 2 people, so the scale needs to reflect that.
     for (let key in recipe) { // Go through all the key pairs
-        O[recipe[key]] += recipe[key] * S; // Add the key pair from the recipe with the scaler applied.
+        O[key] = recipe[key] * S; // Add the key pair from the recipe with the scaler applied.
     }
     return O; 
 }
