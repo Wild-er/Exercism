@@ -8,7 +8,7 @@
  * @returns {number} sum of the two arrays
  */
 export function twoSum(array1, array2) {
-  return Number(String(array1.join(''))) + Number(String(array1.join('')));
+  return Number(String(array1.join(''))) + Number(String(array2.join(''))); // Make the arrays strings while joining them, convert to numbers, add them.
 }
 
 /**
