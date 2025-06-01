@@ -8,14 +8,7 @@
  * @returns {number} sum of the two arrays
  */
 export function twoSum(array1, array2) {
-  let sum = 0;
-  for (let a in array1) { // Sum everything in array1
-    sum += array1[a];
-  };
-  for (let a in array2) {// Sum everything in array2
-    sum += array2[a];
-  };
-  return sum;
+ return Number(array1) + Number(array2);
 }
 
 /**
