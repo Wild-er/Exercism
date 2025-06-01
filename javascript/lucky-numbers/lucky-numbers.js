@@ -8,7 +8,7 @@
  * @returns {number} sum of the two arrays
  */
 export function twoSum(array1, array2) {
- return Number(array1) + Number(array2);
+  return Number(String(array1)) + Number(String(array2));
 }
 
 /**
