@@ -9,7 +9,7 @@
  * @returns {string} Cooking message
  *
  */
-export function lasagna(minutes) {
+export function cookingStatus(minutes) {
 if (minutes === 0) {
     return 'Lasagna is done.'
 }
