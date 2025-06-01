@@ -34,7 +34,7 @@ export function errorMessage(input) {
   if (n < 0 || n > 0 ) {
     return '';
   }
-  else if (input === null || input === undefined) {
+  else if (input === null || input === undefined || input === '') {
     return 'Required field';
   }
   return 'Must be a number besides 0'
