@@ -62,8 +62,7 @@ export function quantities(layers) {
 }
 
 export function addSecretIngredient(fList, mList) {
-    mList.push(fList.pop());
-    return mList;
+    return mList + fList.pop();
 }
 
 export function scaleRecipe(recipe, portions) {
