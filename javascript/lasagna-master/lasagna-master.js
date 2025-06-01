@@ -68,7 +68,7 @@ export function addSecretIngredient(fList, mList) {
 export function scaleRecipe(recipe, portions) {
     const o = {};
     for (let i in recipe) {
-        object.unshift(recipe[i] * portions);
+        object.unshift(recipe[i] * portions / 2);
     }
     return o;
 }
