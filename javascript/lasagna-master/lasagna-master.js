@@ -45,7 +45,7 @@ export function quantities(layers) {
     let n = 0; // noodles count in g
     let s = 0; // sauce count in L
     for (let a in layers) {
-        switch (a) {
+        switch (layers[a]) {
             case 'noodles':
                 n += 50;
                 break;
