@@ -63,6 +63,7 @@ export function quantities(layers) {
 
 export function addSecretIngredient(array1, array2) {
     array1.push(array2.pop());
+    return array1;
 }
 
 export function scaleRecipe(recipe, portions) {
